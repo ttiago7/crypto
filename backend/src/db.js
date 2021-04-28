@@ -6,7 +6,8 @@ const path = require('path');
 //const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 const DB_USER = 'root';
 const DB_PASSWORD = '042577';
-const DB_HOST = 'localhost';
+const DB_HOST = 'mysql'; //docker
+//const DB_HOST = 'localhost'; //localhost
 const MYSQL_PORT = 3306;
 const DB_NAME = 'crypto';
 
@@ -38,7 +39,7 @@ modelDefiners.forEach((model) => model(sequelize));
 // Capitalizamos los nombres de los modelos ie: product => Product
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [
-	entry[0][0].toUpperCase() + entry[0].slice(1),
+	entry[0][0].toLowerCase() + entry[0].slice(1),
 	entry[1],
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
@@ -46,11 +47,11 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 
-const { Currency, Rate } = sequelize.models;
+const { currency, rate } = sequelize.models;
 
 // 1:M
-Currency.hasMany(Rate, { foreignKey: 'id_currency' }); //tiene muchas
-Rate.belongsTo(Currency, { foreignKey: 'id_currency' }); // pertenece a
+currency.hasMany(rate, { foreignKey: 'id_currency' }); //tiene muchas
+rate.belongsTo(currency, { foreignKey: 'id_currency' }); // pertenece a
 
 module.exports = {
 	...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

@@ -1,0 +1,58 @@
+version: '3.1'
+
+services:
+    app:
+        # container_name: crypto-restapi
+        restart: always
+        build: .
+        # build:
+        #     context: .
+        #     dockerfile: Dockerfile
+        expose:
+            - 3001
+        ports:
+            - 3001:3001
+        # volumes:
+        #     - .:/app
+        #     - .:/app
+
+        links:
+            - mysql:mysql
+
+    # mysql:
+    #     container_name: mysqlserver
+    #     ports:
+    #         - '3306:3306'
+    #     image: mysql:8.0
+    #     command: --default-authentication-plugin=mysql_native_password
+    #     environment:
+    #         - MYSQL_DATABASE: crypto
+    #         - MYSQL_ROOT_PASSWORD: 042577
+    #     # volumes:
+    #     #     - ~/docker/mysql-data:/var/lib/mysql
+
+    mysql:
+        # container_name: mysqlserver
+        # image: mysql:5.7
+        image: mysql:5.7.26
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'crypto'
+            # # So you don't have to use root, but you can if you like
+            # MYSQL_USER: 'user'
+            # # You can use whatever password you like
+            # MYSQL_PASSWORD: 'password'
+            # Password for root access
+            MYSQL_ROOT_PASSWORD: '042577'
+        ports:
+            # <Port exposed> : < MySQL Port running inside container>
+            - '3306:3306'
+        expose:
+            # Opens port 3306 on the container
+            - '3306'
+            # Where our data will be persisted
+#       volumes:
+#         - my-db:/var/lib/mysql
+#   # Names our volume
+#   volumes:
+#     my-db:

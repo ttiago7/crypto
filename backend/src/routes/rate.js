@@ -1,14 +1,13 @@
 const server = require('express').Router();
 const { response, prependOnceListener, map } = require('../app.js');
-const { Currency, Rate, conn } = require('../db.js');
+const { currency, rate, conn } = require('../db.js');
 const { Op, Sequelize, QueryTypes } = require('sequelize');
-const currency = require('../models/currency.js');
 
 server.get('/:symbol', async (req, res) => {
 	try {
 		const { symbol } = req.params;
 		var query =
-			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM crypto.rates q GROUP BY q.id_currency) r JOIN crypto.rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id WHERE cc.symbol = ? ORDER BY s.id_currency';
+			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM rates q GROUP BY q.id_currency) r JOIN rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id WHERE cc.symbol = ? ORDER BY s.id_currency';
 
 		const results = await conn.query(query, {
 			type: QueryTypes.SELECT,
@@ -27,7 +26,7 @@ server.get('/:symbol', async (req, res) => {
 		}
 	} catch (error) {
 		res.status(404).json({
-			message: 'Error getting rates: ' + error,
+			message: 'Error get server: ' + error,
 		});
 	}
 });
@@ -35,7 +34,7 @@ server.get('/:symbol', async (req, res) => {
 server.get('/', async (req, res) => {
 	try {
 		var query =
-			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM crypto.rates q GROUP BY q.id_currency) r JOIN crypto.rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id ORDER BY s.id_currency';
+			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM rates q GROUP BY q.id_currency) r JOIN rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id ORDER BY s.id_currency';
 
 		const results = await conn.query(query, {
 			type: QueryTypes.SELECT,
@@ -58,7 +57,7 @@ server.get('/', async (req, res) => {
 	}
 
 	// var response = [];
-	// Rate.findAll({
+	// rate.findAll({
 	// 	attributes: [
 	// 		'id_currency',
 	// 		[
@@ -70,7 +69,7 @@ server.get('/', async (req, res) => {
 	// 	// limit: 1,
 	// 	group: [['id_currency']],
 	// 	include: {
-	// 		model: Currency,
+	// 		model: currency,
 	// 		required: true,
 	// 		attributes: ['id', 'description', 'symbol'],
 	// 	},
@@ -82,7 +81,7 @@ server.get('/', async (req, res) => {
 	// })
 	// 	.then((rates) => {
 	// 		// rates.map((rate) => {
-	// 		// 	Rate.findOne({
+	// 		// 	rate.findOne({
 	// 		// 		where: {
 	// 		// 			[Op.and]: [
 	// 		// 				{ id_currency: rate.id_currency },
@@ -90,7 +89,7 @@ server.get('/', async (req, res) => {
 	// 		// 			],
 	// 		// 		},
 	// 		// 		include: {
-	// 		// 			model: Currency,
+	// 		// 			model: currency,
 	// 		// 			required: true,
 	// 		// 			attributes: ['id', 'description', 'symbol'],
 	// 		// 		},
@@ -112,14 +111,15 @@ server.get('/', async (req, res) => {
 
 server.post('/', (req, res) => {
 	const { id_currency, value } = req.body;
-	Currency.findOne({ where: { id: id_currency } })
+	currency
+		.findOne({ where: { id: id_currency } })
 		.then((currency) => {
 			if (currency === null) {
 				res.status(404).send(
 					'The currency with id ' + id_currency + " doesn't exist"
 				);
 			} else {
-				Rate.create({
+				rate.create({
 					id_currency: id_currency,
 					value: value,
 				})

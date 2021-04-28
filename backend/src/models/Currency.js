@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-	var currenciesSchema = sequelize.define('Currency', {
+	var currenciesSchema = sequelize.define('currency', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
