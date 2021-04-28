@@ -36,7 +36,7 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#Diagram">DB - EER Diagram</a></li>
+    <li><a href="#EER-Diagram">EER-Diagram</a></li>
   </ol>
 </details>
 
@@ -101,6 +101,6 @@ Calizaya Santiago - [@linkedin-ttiago7](https://www.linkedin.com/in/ttiago7/) - 
 
 
 <!-- ACKNOWLEDGEMENTS -->
-## Diagram
+## EER-Diagram
 
 <img src="/mysql/crypto DB - EER Diagram.JPG" alt="My cool logo"/>
