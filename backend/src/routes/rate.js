@@ -109,6 +109,27 @@ server.get('/', async (req, res) => {
 	// 	});
 });
 
+server.get('/:idCurrency/:quantity', (req, res) => {
+	const { idCurrency, quantity } = req.params;
+	rate.findAll({
+		attributes: ['value', 'createdAt'],
+		where: { id_currency: idCurrency },
+		order: [['createdAt', 'DESC']],
+		limit: parseInt(quantity, 10),
+	})
+		.then((rates) => {
+			res.status(200).json({
+				message: 'Rates found',
+				rates: rates.reverse(),
+			});
+		})
+		.catch((error) => {
+			res.status(404).json({
+				message: 'Error getting rate: ' + error,
+			});
+		});
+});
+
 server.post('/', (req, res) => {
 	const { id_currency, value } = req.body;
 	currency
