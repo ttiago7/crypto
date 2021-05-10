@@ -7,7 +7,7 @@ server.get('/:symbol', async (req, res) => {
 	try {
 		const { symbol } = req.params;
 		var query =
-			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM rates q GROUP BY q.id_currency) r JOIN rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id WHERE cc.symbol = ? ORDER BY s.id_currency';
+			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM crypto.rates q GROUP BY q.id_currency) r JOIN crypto.rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id WHERE cc.symbol = ? ORDER BY s.id_currency';
 
 		const results = await conn.query(query, {
 			type: QueryTypes.SELECT,
@@ -34,7 +34,7 @@ server.get('/:symbol', async (req, res) => {
 server.get('/', async (req, res) => {
 	try {
 		var query =
-			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM rates q GROUP BY q.id_currency) r JOIN rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id ORDER BY s.id_currency';
+			'SELECT s.id, s.id_currency, s.value, s.createdAt as "created_at", cc.id as "ID", cc.description, cc.symbol FROM ( SELECT q.id_currency, MAX(q.createdAt) AS max_date FROM crypto.rates q GROUP BY q.id_currency) r JOIN crypto.rates s ON s.id_currency = r.id_currency AND s.createdAt  = r.max_date JOIN crypto.currencies cc ON s.id_currency = cc.id ORDER BY s.id_currency';
 
 		const results = await conn.query(query, {
 			type: QueryTypes.SELECT,
