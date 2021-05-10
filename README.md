@@ -66,7 +66,7 @@ Instructions on setting up this project locally. To get a local copy up and runn
    ```sh
    git clone https://github.com/ttiago7/crypto.git
    ```
-2. Open the command line and go to folder called backend, into this execute next command
+2. Open the command line in the repo cloned folder, into this execute next command
    ```sh
    docker-compose up
    ```
