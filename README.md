@@ -13,9 +13,9 @@
     <a href="https://github.com/ttiago7/crypto/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/#">Coming soon</a>
+    <a href="https://github.com/ttiago7/crypto">View Backend repo</a>
     ·
-    <a href="https://github.com/#">View Frontend repo</a>
+    <a href="https://github.com/ttiago7/cryptoclient">View Frontend repo</a>
   </p>
 </p>
 
